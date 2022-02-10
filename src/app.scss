@@ -7,7 +7,7 @@
 .app {
     width: 100%;
     min-height: 100vh;
-    background-image: linear-gradient(257deg, #f59c07, #f57507);
+    background-image: linear-gradient(257deg, #59145c, #262d92);
     padding: 50px;
     font-family: 'Roboto', sans-serif;
 }
@@ -17,7 +17,7 @@
     padding: 35px;
     width: 700px;
     min-height: 500px;
-    background-color: #fff;
+    background-color: rgba(145, 127, 137, 0.62);
     border-radius: 3px;
     box-shadow: 0 9px 23px 0 rgb(0 0 0 / 3%);
     h2 {
@@ -42,7 +42,7 @@
         border-radius: 10px;
         font-size: 22px;
         &:focus {
-            outline: 1px solid #f57507;
+            outline: 1px solid #59145c;
         }
     }
     select {
@@ -58,7 +58,7 @@
         border-radius: 10px;
         cursor: pointer;
         &:focus {
-            outline: 1px solid #f57507;
+            outline: 1px solid #59145c;
         }
     }
     textarea {
@@ -73,7 +73,7 @@
         border-radius: 10px;
         resize:none;
         &:focus {
-            outline: 1px solid #f57507;
+            outline: 1px solid #59145c;
         }
     }
     input[type="checkbox"] {
@@ -97,7 +97,12 @@
         color: #fff;
         border: 0;
         border-radius: 10px;
-        background-image: linear-gradient(257deg, #f59c07, #f57507);
+        background-image: linear-gradient(257deg, #59145c, #262d92);
+        cursor: pointer;
+
+        &:active {
+            transform: scale(.9);
+        }
     }
     .error {
         color: #e53e3e;
