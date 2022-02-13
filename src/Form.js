@@ -1,19 +1,44 @@
-import { useFormik } from 'formik';
+import { Field, Form, Formik, useField, ErrorMessage } from 'formik';
 import * as Yup from 'yup'
 
+const DInput = ({label, ...props}) =>{
+    const [field, meta] = useField(props)
+    return (
+        <>
+            <label htmlFor={props.name}>{label}</label>
+            <input {...field} {...props}/>
+            {meta.touched && meta.error ? (<div className="error">{meta.error}</div>) : null}
+        </>
+    )
+}
 
-const Form = () => {
+const DCheckbox = ({children, ...props}) =>{
+    const [field, meta] = useField({...props, type: 'checkbox'})
+    return (
+        <>
+            <label className="checkbox">
+                <input type="checkbox" {...field} {...props}/>
+                {children}
+            </label>
+            {meta.touched && meta.error ? (<div className="error">{meta.error}</div>) : null}
+        </>
+    )
+}
 
-    const formik = useFormik({
-        initialValues: {
+
+const DForm = () => {
+
+    return (
+        <Formik
+            initialValues={{
             name: '',
             email: '',
             amount: '',
             currency: '',
             text: '',
             terms: false
-        },
-        validationSchema: Yup.object({
+        }}
+        validationSchema={Yup.object({
             name: Yup.string()
                 .min(2, 'Минимум 2 символа')
                 .required('Обязательное поле'),
@@ -29,76 +54,57 @@ const Form = () => {
             terms: Yup.boolean()
                 .required('Необходимо согласие')
                 .oneOf([true], "Необходимо согласие")
-        }),
-        onSubmit: values => console.log(JSON.stringify(values, null, 2))
-    })
-
-    return (
-        <form className="form" onSubmit={formik.handleSubmit}>
-            <h2>Донат</h2>
-            <label htmlFor="name">Ваше имя</label>
-            <input
-                id="name"
-                name="name"
-                type="text"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-            />
-            {formik.errors.name && formik.touched.name ? <div>{formik.errors.name}</div> : null }
-            <label htmlFor="email">Ваша почта</label>
-            <input
-                id="email"
-                name="email"
-                type="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-            />
-            {formik.errors.email && formik.touched.email ? <div>{formik.errors.email}</div> : null }
-            <label htmlFor="amount">Сумма</label>
-            <input
-                id="amount"
-                name="amount"
-                type="number"
-                value={formik.values.amount}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-            />
-            <label htmlFor="currency">Валюта</label>
-            <select
-                id="currency"
-                name="currency"
-                value={formik.values.currency}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                >
-                    <option value="">Выберите валюту</option>
-                    <option value="USD">USD</option>
-                    <option value="UAH">UAH</option>
-                    <option value="RUB">RUB</option>
-            </select>
-            <label htmlFor="text">Ваше сообщение</label>
-            <textarea
-                id="text"
-                name="text"
-                value={formik.values.text}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-            />
-            <label className="checkbox">
-                <input
-                    name="terms"
-                    type="checkbox"
-                    value={formik.values.terms}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+        })}
+        onSubmit={values => console.log(JSON.stringify(values, null, 2))}
+        >
+            <Form className="form">
+                <h2>Донат</h2>
+                <DInput
+                    id="name"
+                    name="name"
+                    type="text"
+                    label="Ваше имя"
                 />
-                Соглашаетесь с политикой конфиденциальности?
-            </label>
-            <button type="submit">Отправить</button>
-        </form>
+                <DInput
+                    id="email"
+                    name="email"
+                    type="email"
+                    label="Ваша почта"
+                    autoComplete="off"
+                />
+                <DInput
+                    id="amount"
+                    name="amount"
+                    type="number"
+                    label="Сумма"
+                />
+
+                <label htmlFor="currency">Валюта</label>
+                <Field
+                    id="currency"
+                    name="currency"
+                    as="select"
+                    >
+                        <option value="">Выберите валюту</option>
+                        <option value="USD">USD</option>
+                        <option value="UAH">UAH</option>
+                        <option value="RUB">RUB</option>
+                </Field>
+                <ErrorMessage component="div" className="error" name="currency"/>
+                <label htmlFor="text">Ваше сообщение</label>
+                <Field
+                    id="text"
+                    name="text"
+                    as="textarea"
+                />
+                <ErrorMessage component="div" className="error" name="text"/>
+                <DCheckbox name="terms">
+                    Соглашаетесь с политикой конфиденциальности?
+                </DCheckbox>
+                <button type="submit">Отправить</button>
+            </Form>
+        </Formik>
     )
 }
 
-export default Form;
+export default DForm;
